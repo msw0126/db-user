@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taoshu.db.auth.dao.SysVerifyMapper">
+
+	<sql id="Base_Column_List">
+		id,address,type,verify_code,verify_status,create_date
+	</sql>
+
+	<select id="get" resultType="com.taoshu.db.auth.module.SysVerify"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_verify where id=#{id} and verify_status='0'
+	</select>
+
+	<select id="getVerifyCode" resultType="com.taoshu.db.auth.module.SysVerify"
+		parameterType="com.taoshu.db.auth.module.SysVerify">
+		select
+		<include refid="Base_Column_List" />
+		from `sys_verify` WHERE `address`=#{address} AND `type`=#{type} AND
+		`verify_status`='0' ORDER BY `create_date` DESC LIMIT 1 ;
+	</select>
+
+	<insert id="insert" parameterType="com.taoshu.db.auth.module.SysVerify"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_verify(address,type,verify_code,verify_status,create_date)
+		values(#{address},#{type},#{verifyCode},#{verifyStatus},#{createDate})
+	</insert>
+
+	<update id="updateVerify" parameterType="java.lang.Long">
+		update sys_verify set verify_status='1' where id=#{id}
+	</update>
+</mapper>

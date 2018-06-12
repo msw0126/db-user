@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taoshu.db.auth.dao.SysUserInfoMapper">
+
+	<sql id="Base_Column_List">
+		user_id as userId,real_name as realName,company,position,address
+	</sql>
+	
+ 	<insert id="insert" parameterType="com.taoshu.db.auth.module.SysUserInfo">
+ 		insert into sys_user_info(user_id,real_name,company,position,address) values(#{userId},#{realName},#{company},#{position},#{address})
+ 	</insert>
+
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taoshu.db.auth.dao.SysUserApplyMapper">
+
+	<sql id="Base_Column_List">
+		id,real_name as realName,company,position,user_type as
+		userType,address,email,mobile,password,ip,audit_state as
+		auditState,remark,create_time as createTime
+	</sql>
+
+	<insert id="insert" parameterType="com.taoshu.db.auth.module.SysUserApply">
+		insert into
+		sys_user_apply(id,real_name,company,position,user_type,address,email,mobile,password,ip,audit_state,remark,create_time)
+		values(NULL,#{realName},#{company},#{position},${userType},#{address},#{email},#{mobile},#{password},#{ip},#{auditState},#{remark},#{createTime})
+	</insert>
+	<select id="selectByContact" resultType="com.taoshu.db.auth.module.SysUserApply">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user_apply
+		where (email = #{email,jdbcType=VARCHAR}
+		<!-- or mobile = #{mobile,jdbcType=VARCHAR} -->
+		)
+		and audit_state='0'
+		<if test="id != null">
+			and id!=#{id}
+		</if>
+	</select>
+	<select id="selectApplyPageByParam" parameterType="java.util.Map"
+		resultType="com.taoshu.db.auth.module.SysUserApply">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user_apply
+		<where>
+			<if test="auditState!=null and auditState!=''">
+				and audit_state=#{auditState}
+			</if>
+			<if test="type==1 and queryValue != null and queryValue !=''">
+				and real_name like
+				concat(concat('%',#{queryValue,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="type==2 and queryValue != null and queryValue !=''">
+				and mobile like
+				concat(concat('%',#{queryValue,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="type==3 and queryValue != null and queryValue !=''">
+				and email like
+				concat(concat('%',#{queryValue,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="type==4 and queryValue != null and queryValue !=''">
+				and company like
+				concat(concat('%',#{queryValue,jdbcType=VARCHAR}),'%')
+			</if>
+
+		</where>
+	</select>
+	<select id="selectApplyById" parameterType="java.lang.Long"
+		resultType="com.taoshu.db.auth.module.SysUserApply">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user_apply
+		where id=#{id}
+	</select>
+	<update id="applydRestPwd">
+		update sys_user_apply set password=#{pwd} where
+		id=#{id}
+	</update>
+	<update id="applyExecute" parameterType="java.util.Map">
+		update sys_user_apply
+		set
+		real_name=#{realName},
+		company=#{company},
+		position=#{position},
+		user_type=#{userType},
+		address=#{address},
+		email=#{email},
+		mobile=#{mobile},
+		audit_state=#{auditState},
+		remark=#{remark}
+		where id=#{id}
+	</update>
+</mapper>

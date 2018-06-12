@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taoshu.db.auth.dao.CustomerInfoMapper">
+
+	<insert id="insert" parameterType="com.taoshu.db.auth.module.CustomerInfo" useGeneratedKeys="true" keyProperty="customerId">
+		insert into customer_info (real_name, company,position,address)
+		values (#{realName}, #{company}, #{position}, #{address})
+	</insert>
+
+</mapper>
